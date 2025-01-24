@@ -4,7 +4,6 @@ import random
 if __name__ == '__main__':
     pygame.init()
 
-    # Константы
     width, height = 900, 540
     fps = 60
     block_size = 50
@@ -12,12 +11,11 @@ if __name__ == '__main__':
     spawn_rate = 500
     num_obst = 4
 
-    # Цвета
     white = (255, 255, 255)
     green = (8, 37, 0)
 
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Crossy Road Inspired Game")
+    pygame.display.set_caption("Frogger quest")
 
     try:
         frog_image = pygame.image.load('frog.jpg')
@@ -34,7 +32,7 @@ if __name__ == '__main__':
             super().__init__()
             self.image = pygame.transform.scale(frog_image, (block_size, block_size))
             self.rect = self.image.get_rect()
-            self.rect.center = (block_size // 2, height - block_size)
+            self.rect.center = (25, height // 2 + 100)
 
         def update(self):
             keys = pygame.key.get_pressed()
@@ -70,22 +68,16 @@ if __name__ == '__main__':
 
     def create_obstacles():
         for _ in range(num_obst):
-            if level == 1:
-                weights1 = [2, 2, 2]
-            elif level == 2:
-                weights1 = [3, 2, 3]
-            else:
-                weights1 = [5, 1, 3]
-            obstacle_type = random.choices(['rock', 'water', 'log'], weights=weights1, k=1)[0]
-            x_position = random.randint(0, (width // block_size) - 1) * block_size
+            obstacle_type = random.choices(['rock', 'water', 'log'], k=1)[0]
+            x_position = random.randint(50, 800)
             if obstacle_type == 'rock':
-                y_position = random.randint(-3 * block_size, -block_size)
+                y_position = random.randint(-3 * block_size, -rock_image.get_size()[0])
                 obstacle_image = pygame.transform.scale(rock_image, rock_image.get_size())
             elif obstacle_type == 'water':
-                y_position = random.randint(-3 * block_size, -block_size)
+                y_position = random.randint(-3 * block_size, -log2_image.get_size()[0])
                 obstacle_image = pygame.transform.scale(log2_image, log2_image.get_size())
-            else:  # log
-                y_position = random.randint(-3 * block_size, -block_size)
+            else:
+                y_position = random.randint(-3 * block_size, -log_image.get_size()[0])
                 obstacle_image = pygame.transform.scale(log_image, log_image.get_size())
 
             obstacle = Obstacle(x_position, y_position, obstacle_image)
@@ -151,7 +143,7 @@ if __name__ == '__main__':
 
     def next_level(level):
         global speed, spawn_rate, num_obst
-        speed += 1
+        speed += 0.5
         spawn_rate -= 50
         num_obst += 1
         show_level_screen(level)
@@ -180,8 +172,7 @@ if __name__ == '__main__':
         if pygame.sprite.spritecollideany(player, obstacles):
             print("Game Over!")
             game_over()
-            spawn_rate = 500
-            num_obst = 4
+            spawn_rate = 1000
             all_sprites.empty()
             obstacles.empty()
             player = Player()
@@ -193,7 +184,8 @@ if __name__ == '__main__':
         if player.rect.right >= width:
             print("You Win!")
             level += 1
-            if level > 2:
+            spawn_rate -= 50
+            if level > 3:
                 print("Поздравляем! Вы прошли все уровни!")
                 running = False
             else:
