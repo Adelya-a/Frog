@@ -4,7 +4,7 @@ import random
 if __name__ == '__main__':
     pygame.init()
 
-    width, height = 900, 540
+    width, height = 1000, 540
     fps = 60
     block_size = 50
     speed = 5
@@ -23,6 +23,7 @@ if __name__ == '__main__':
         log2_image = pygame.image.load('log2.png')
         log_image = pygame.image.load('log1.png')
         background_image = pygame.image.load('background.png')
+        end_image = pygame.image.load('home.png')
     except pygame.error:
         print(f"НЕКРАСИВЫЕ ИЗОБРАЖЕНИЯ! МНЕ НЕ НРАВИТСЯ!")
         exit()
@@ -37,13 +38,13 @@ if __name__ == '__main__':
         def update(self):
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT] or keys[pygame.K_a] and self.rect.left > 0:
-                self.rect.x -= 5
+                self.rect.x -= 7
             if keys[pygame.K_RIGHT] or keys[pygame.K_d] and self.rect.right < width:
-                self.rect.x += 5
+                self.rect.x += 7
             if keys[pygame.K_UP] or keys[pygame.K_w] and self.rect.top > 0:
-                self.rect.y -= 5
+                self.rect.y -= 7
             if keys[pygame.K_DOWN] or keys[pygame.K_s] and self.rect.bottom < height:
-                self.rect.y += 5
+                self.rect.y += 7
 
 
     class Obstacle(pygame.sprite.Sprite):
@@ -88,6 +89,7 @@ if __name__ == '__main__':
     def show_start_screen():
         screen.blit(background_image, (0, 0))
         font = pygame.font.Font(None, 74)
+        #pygame.draw.rect(screen, '#449B6A', pygame.Rect(0, 350, 1000, 1000))
         text = font.render("Нажмите SPACE чтобы начать", True, green)
         text_rect = text.get_rect(center=(width // 2, height // 2 + 115))
         screen.blit(text, text_rect)
@@ -105,6 +107,7 @@ if __name__ == '__main__':
 
     def show_level_screen(level):
         screen.blit(background_image, (0, 0))
+        #pygame.draw.rect(screen, (148, 215, 118), pygame.Rect(width // 30, 250, 1000, 1000), 0, 30)
         font = pygame.font.Font(None, 74)
         text = font.render(f"Уровень {level}", True, green)
         text_rect = text.get_rect(center=(width // 2, height // 2 + 115))
@@ -115,6 +118,7 @@ if __name__ == '__main__':
     def ready_steady_go():
         for text in ["На старт!", "Внимание!", "Марш!"]:
             screen.blit(background_image, (0, 0))
+            #pygame.draw.rect(screen, (148, 215, 118), pygame.Rect(width // 30, 250, 1000, 1000), 0, 30)
             font = pygame.font.Font(None, 74)
             text_surface = font.render(text, True, green)
             text_rect = text_surface.get_rect(center=(width // 2, height // 2 + 115))
@@ -126,9 +130,14 @@ if __name__ == '__main__':
     def game_over():
         screen.blit(background_image, (0, 0))
         font = pygame.font.Font(None, 74)
-        text = font.render("Game Over! Нажмите SPACE чтобы продолжить", True, green)
-        text_rect = text.get_rect(center=(width // 2, height // 2 + 115))
+        text = font.render("Game Over!", True, green)
+        text2 = font.render(" Нажмите SPACE, чтобы продолжить", True, green)
+       # pygame.draw.rect(screen, (148, 215, 118), pygame.Rect(width // 30, 250, 1000, 1000), 0, 30)
+        # pygame.draw.rect(screen, (148, 215, 118), pygame.Rect(width // 30, 250, 950, 150), 0, 30)
+        text_rect = text.get_rect(center=(width // 2, height // 2 + 30))
+        text_rect2 = text2.get_rect(center=(width // 2, height // 2 + 80))
         screen.blit(text, text_rect)
+        screen.blit(text2, text_rect2)
         pygame.display.flip()
 
         waiting = True
@@ -177,7 +186,6 @@ if __name__ == '__main__':
             obstacles.empty()
             player = Player()
             all_sprites.add(player)
-            show_start_screen()
             show_level_screen(level)
             ready_steady_go()
 
@@ -185,8 +193,16 @@ if __name__ == '__main__':
             print("You Win!")
             level += 1
             spawn_rate -= 50
-            if level > 3:
+            if level > 1:
                 print("Поздравляем! Вы прошли все уровни!")
+                #screen.blit(end_image, (0, 0))
+                # pygame.display.flip()
+                # waiting = True
+                # while waiting:
+                #     for event in pygame.event.get():
+                #         if event.type == pygame.QUIT:
+                #             pygame.quit()
+                #             exit()
                 running = False
             else:
                 next_level(level)
