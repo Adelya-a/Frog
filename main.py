@@ -1,6 +1,6 @@
 import pygame
 import random
-from Frog_animation.Plater import Player
+from Frog_animation.Player import Player
 
 if __name__ == '__main__':
     pygame.init()
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         rock_image = pygame.image.load('rock.png')
         log2_image = pygame.image.load('log2.png')
         log_image = pygame.image.load('log1.png')
-        background_image = pygame.image.load('background3.png')
+        background_image = pygame.image.load('background.png')
         end_image = pygame.image.load('home.png')
     except pygame.error:
         print(f"НЕКРАСИВЫЕ ИЗОБРАЖЕНИЯ! МНЕ НЕ НРАВИТСЯ!")
