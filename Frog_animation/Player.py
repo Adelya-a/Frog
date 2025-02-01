@@ -35,24 +35,28 @@ class Player(pygame.sprite.Sprite):
             if value >= len(image_left):
                 value = 0
             img = pygame.transform.scale(image_left[value], (40, 50))
-        if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and self.rect.right < 1000:
+        elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and self.rect.right < 1000:
             self.rect.x += 6
             move = True
             if value >= len(image_right):
                 value = 0
             img = pygame.transform.scale(image_right[value], (40, 50))
-        if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.rect.top > 0:
+        elif (keys[pygame.K_UP] or keys[pygame.K_w]) and self.rect.top > 0:
             self.rect.y -= 6
             move = True
             if value >= len(image_up):
                 value = 0
             img = pygame.transform.scale(image_up[value], (40, 50))
-        if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and self.rect.bottom < 540:
+        elif (keys[pygame.K_DOWN] or keys[pygame.K_s]) and self.rect.bottom < 540:
             self.rect.y += 6
             move = True
             if value >= len(image_down):
                 value = 0
             img = pygame.transform.scale(image_down[value], (40, 50))
+        else:
+            move = False
+            if 300 < self.rect.right < 800:
+                self.rect.y += 1
         if move:
             value += 1
         self.image = pygame.transform.scale(img, (40, 50))

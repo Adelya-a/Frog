@@ -24,7 +24,7 @@ if __name__ == '__main__':
         log2_image = pygame.image.load('log2.png')
         log_image = pygame.image.load('log1.png')
         background_image = pygame.image.load('background.png')
-        end_image = pygame.image.load('home.png')
+        background_image_sec = pygame.image.load('background_sec.png')
     except pygame.error:
         print(f"НЕКРАСИВЫЕ ИЗОБРАЖЕНИЯ! МНЕ НЕ НРАВИТСЯ!")
         exit()
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     def create_obstacles():
         for _ in range(num_obst):
             obstacle_type = random.choices(['log1', 'log'])[0]
-            x_position = random.randint(200, 700)
+            x_position = random.randint(300, 750)
             if obstacle_type == 'log1':
                 y_position = random.randint(-1 * block_size, -log2_image.get_size()[0])
                 obstacle_image = pygame.transform.scale(log2_image, log2_image.get_size())
@@ -177,10 +177,8 @@ if __name__ == '__main__':
                 obstacles.empty()
                 all_sprites.add(player)
 
-        screen.fill(white)
-
+        screen.blit(background_image_sec, (0, 0))
         all_sprites.draw(screen)
-
         finish_line_rect = pygame.Rect(width - block_size, 0, block_size, height)
         pygame.draw.rect(screen, green, finish_line_rect)
 
