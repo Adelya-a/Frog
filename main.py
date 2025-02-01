@@ -127,9 +127,11 @@ if __name__ == '__main__':
 
     def next_level(level):
         global speed, spawn_rate, num_obst
-        speed += 0.5
         spawn_rate -= 50
-        num_obst += 1
+        if level % 2 != 0:
+            num_obst += 1
+        else:
+            speed += 0.5
         show_level_screen(level)
         ready_steady_go()
 
