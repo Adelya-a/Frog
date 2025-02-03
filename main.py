@@ -246,7 +246,7 @@ if __name__ == '__main__':
             level_time = calculate_time(level_start_time)
             print(f"Время на уровень {level - 1}: {level_time} секунд")
 
-            if level > 1:
+            if level > 3:
                 print("Поздравляем! Вы прошли все уровни!")
                 screen.blit(pobeda_image, (0, 0))
                 waiting = True
