@@ -81,7 +81,7 @@ if __name__ == '__main__':
                 img = pygame.transform.scale(image_down[value], (40, 50))
             else:
                 move = False
-                if 300 < self.rect.right < 800:
+                if 300 < self.rect.right < 800 and self.rect.bottom < 540:
                     self.rect.y += 1
             if move:
                 value += 1
@@ -276,7 +276,7 @@ if __name__ == '__main__':
         if level == 1:
             show_timer(((pygame.time.get_ticks() - level_start_time) // 1000) - 6)
         else:
-            show_timer((pygame.time.get_ticks() - level_start_time) // 1000) # небольшой костыль
+            show_timer((pygame.time.get_ticks() - level_start_time) // 1000)
         pygame.display.flip()
         clock.tick(fps)
 
