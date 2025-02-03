@@ -24,6 +24,7 @@ if __name__ == '__main__':
         log_image = pygame.image.load('log1.png')
         background_image = pygame.image.load('background.png')
         background_image_sec = pygame.image.load('background_sec.png')
+        pobeda_image = pygame.image.load('Pobeda.png')
     except pygame.error:
         print(f"НЕКРАСИВЫЕ ИЗОБРАЖЕНИЯ! МНЕ НЕ НРАВИТСЯ!")
         exit()
@@ -44,8 +45,6 @@ if __name__ == '__main__':
     value = 0
     img = pygame.transform.scale(image_down[value], (40, 50))
     last_im = pygame.transform.scale(image_down[value], (40, 50))
-
-
     class Player(pygame.sprite.Sprite):
         def __init__(self):
             super().__init__()
@@ -53,7 +52,6 @@ if __name__ == '__main__':
             self.image = pygame.transform.scale(img, (40, 50))
             self.rect = self.image.get_rect()
             self.rect.center = (25, height // 2 + 100)
-
         def update(self):
             global value, img, move, screen
             keys = pygame.key.get_pressed()
@@ -88,7 +86,6 @@ if __name__ == '__main__':
             if move:
                 value += 1
             self.image = pygame.transform.scale(img, (40, 50))
-
     class Obstacle(pygame.sprite.Sprite):
         def __init__(self, x, y, image):
             super().__init__()
@@ -164,6 +161,7 @@ if __name__ == '__main__':
             pygame.display.flip()
             pygame.time.delay(1000)
 
+
     def game_over():
         screen.blit(background_image, (0, 0))
         font = pygame.font.Font(None, 74)
@@ -174,7 +172,6 @@ if __name__ == '__main__':
         screen.blit(text, text_rect)
         screen.blit(text2, text_rect2)
         pygame.display.flip()
-
         waiting = True
         while waiting:
             for event in pygame.event.get():
@@ -198,10 +195,26 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     running = True
     level = 1
+    level_start_time = pygame.time.get_ticks()
     show_start_screen()
     show_level_screen(level)
     ready_steady_go()
     last_spawn_time = pygame.time.get_ticks()
+
+
+    def show_timer(seconds):
+        font = pygame.font.Font(None, 36)
+        timer_text = font.render(f"Время: {seconds}s", True, (255,255,255))
+        screen.blit(timer_text, (width // 2 - timer_text.get_width() // 2, height - 40))
+
+
+    def start_timer():
+        return pygame.time.get_ticks()
+
+
+    def calculate_time(start_time):
+        return (pygame.time.get_ticks() - start_time) // 1000
+
 
     while running:
         for event in pygame.event.get():
@@ -227,26 +240,44 @@ if __name__ == '__main__':
             ready_steady_go()
 
         if player.rect.right >= width - block_size:
-            print("You Win!")
+            print("Ты прошел уровень!")
             level += 1
-            if level > 3:
+
+            level_time = calculate_time(level_start_time)
+            print(f"Время на уровень {level - 1}: {level_time} секунд")
+
+            if level > 1:
                 print("Поздравляем! Вы прошли все уровни!")
+                screen.blit(pobeda_image, (0, 0))
+                waiting = True
                 running = False
+                while waiting:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            exit()
+                    screen.blit(pobeda_image, (0, 0))
+                    pygame.display.flip()
+
             else:
                 next_level(level)
                 player.rect.center = (25, height // 2 + 100)
                 all_sprites.empty()
                 obstacles.empty()
                 all_sprites.add(player)
+                level_start_time = pygame.time.get_ticks()
 
         screen.blit(background_image_sec, (0, 0))
         all_sprites.draw(screen)
         finish_line_rect = pygame.Rect(width - block_size, 0, block_size, height)
         pygame.draw.rect(screen, green, finish_line_rect)
 
+        level_time = calculate_time(level_start_time)
+        if level == 1:
+            show_timer(((pygame.time.get_ticks() - level_start_time) // 1000) - 6)
+        else:
+            show_timer((pygame.time.get_ticks() - level_start_time) // 1000) # небольшой костыль
         pygame.display.flip()
         clock.tick(fps)
 
     pygame.quit()
-
-
