@@ -45,6 +45,8 @@ if __name__ == '__main__':
     value = 0
     img = pygame.transform.scale(image_down[value], (40, 50))
     last_im = pygame.transform.scale(image_down[value], (40, 50))
+
+
     class Player(pygame.sprite.Sprite):
         def __init__(self):
             super().__init__()
@@ -52,6 +54,7 @@ if __name__ == '__main__':
             self.image = pygame.transform.scale(img, (40, 50))
             self.rect = self.image.get_rect()
             self.rect.center = (25, height // 2 + 100)
+
         def update(self):
             global value, img, move, screen
             keys = pygame.key.get_pressed()
@@ -81,11 +84,16 @@ if __name__ == '__main__':
                 img = pygame.transform.scale(image_down[value], (40, 50))
             else:
                 move = False
-                if 300 < self.rect.right < 800 and self.rect.bottom < 540:
+                if 300 < self.rect.right < 800:
                     self.rect.y += 1
+                    if self.rect.bottom > 540:
+                        game_over()
+
             if move:
                 value += 1
             self.image = pygame.transform.scale(img, (40, 50))
+
+
     class Obstacle(pygame.sprite.Sprite):
         def __init__(self, x, y, image):
             super().__init__()
@@ -98,6 +106,7 @@ if __name__ == '__main__':
             self.rect.y += speed
             if self.rect.top > height:
                 self.kill()
+
 
     all_sprites = pygame.sprite.Group()
     obstacles = pygame.sprite.Group()
@@ -141,6 +150,7 @@ if __name__ == '__main__':
                     if event.key == pygame.K_SPACE:
                         waiting = False
 
+
     def show_level_screen(level):
         screen.blit(background_image, (0, 0))
         font = pygame.font.Font(None, 74)
@@ -149,6 +159,7 @@ if __name__ == '__main__':
         screen.blit(text, text_rect)
         pygame.display.flip()
         pygame.time.delay(3000)
+
 
     def ready_steady_go():
         for text in ["На старт!", "Внимание!", "Марш!"]:
@@ -182,6 +193,7 @@ if __name__ == '__main__':
                     if event.key == pygame.K_SPACE:
                         waiting = False
 
+
     def next_level(level):
         global speed, spawn_rate, num_obst
         spawn_rate -= 50
@@ -191,6 +203,7 @@ if __name__ == '__main__':
             speed += 0.5
         show_level_screen(level)
         ready_steady_go()
+
 
     clock = pygame.time.Clock()
     running = True
@@ -204,7 +217,7 @@ if __name__ == '__main__':
 
     def show_timer(seconds):
         font = pygame.font.Font(None, 36)
-        timer_text = font.render(f"Время: {seconds}s", True, (255,255,255))
+        timer_text = font.render(f"Время: {seconds}s", True, (255, 255, 255))
         screen.blit(timer_text, (width // 2 - timer_text.get_width() // 2, height - 40))
 
 
@@ -246,7 +259,7 @@ if __name__ == '__main__':
             level_time = calculate_time(level_start_time)
             print(f"Время на уровень {level - 1}: {level_time} секунд")
 
-            if level > 3:
+            if level > 10:
                 print("Поздравляем! Вы прошли все уровни!")
                 screen.blit(pobeda_image, (0, 0))
                 waiting = True
